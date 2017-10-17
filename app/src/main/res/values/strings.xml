@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Infinite Scroll</string>
+    <string name="internet_connection_not_available">Отсутвует интернет соединение</string>
+    <string name="loading_data_error">Ошибка загрузки данных</string>
+</resources>
