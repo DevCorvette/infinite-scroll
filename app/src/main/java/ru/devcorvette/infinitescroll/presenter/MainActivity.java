@@ -21,7 +21,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         view = new View(this);
-        model = new Model();
+        model = new Model(this);
         presenter = new Presenter(view, model, this);
 
         presenter.onCreate();

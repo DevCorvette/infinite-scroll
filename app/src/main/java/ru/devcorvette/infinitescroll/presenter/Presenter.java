@@ -2,7 +2,10 @@ package ru.devcorvette.infinitescroll.presenter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
+
+import java.util.List;
 
 import ru.devcorvette.infinitescroll.R;
 import ru.devcorvette.infinitescroll.model.api.FeedResponse;
@@ -34,10 +37,10 @@ public class Presenter implements IPresenter {
             }
         });
 
-        modelSubscription = model.getObservable().subscribe(new Action1<FeedResponse>() {
+        modelSubscription = model.getObservable().subscribe(new Action1<List<Bitmap>>() {
             @Override
-            public void call(FeedResponse feedResponse) {
-                showData(feedResponse);
+            public void call(List<Bitmap> list) {
+                showData(list);
             }
         });
     }
@@ -53,7 +56,7 @@ public class Presenter implements IPresenter {
         }
     }
 
-    private void showData(FeedResponse feedResponse) {
+    private void showData(List<Bitmap> list) {
         //вызывает необходимые методы у отображения
     }
 

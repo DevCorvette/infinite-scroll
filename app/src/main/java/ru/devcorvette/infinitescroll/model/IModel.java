@@ -1,6 +1,9 @@
 package ru.devcorvette.infinitescroll.model;
 
-import ru.devcorvette.infinitescroll.model.api.FeedResponse;
+import android.graphics.Bitmap;
+
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -10,7 +13,7 @@ public interface IModel {
     /**
      * @return observable
      */
-    Observable<FeedResponse> getObservable();
+    Observable<List<Bitmap>> getObservable();
 
     /**
      * Загружает данные и отправляет подписчику.
