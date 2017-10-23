@@ -1,7 +1,5 @@
 package ru.devcorvette.infinitescroll.model.api;
 
-import java.util.List;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -15,7 +13,7 @@ public class FeedRequest {
     private Object nearToLocation;
     @SerializedName("categories")
     @Expose
-    private List<Object> categories = null;
+    private Object[] categories;
     @SerializedName("userId")
     @Expose
     private Object userId;
@@ -29,6 +27,7 @@ public class FeedRequest {
     public FeedRequest(int skip, int take) {
         this.skip = skip;
         this.take = take;
+        categories = new Object[0];
     }
 
     public Object getCityId() {
@@ -47,11 +46,11 @@ public class FeedRequest {
         this.nearToLocation = nearToLocation;
     }
 
-    public List<Object> getCategories() {
+    public Object[] getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Object> categories) {
+    public void setCategories(Object[] categories) {
         this.categories = categories;
     }
 

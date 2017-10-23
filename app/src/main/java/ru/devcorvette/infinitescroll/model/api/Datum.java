@@ -1,7 +1,6 @@
 
 package ru.devcorvette.infinitescroll.model.api;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -39,13 +38,13 @@ public class Datum {
     private Organization organization;
     @SerializedName("coverInfo")
     @Expose
-    private List<CoverInfo> coverInfo = null;
+    private CoverInfo[] coverInfo = null;
     @SerializedName("contact_info")
     @Expose
-    private List<ContactInfo> contactInfo = null;
+    private ContactInfo[] contactInfo = null;
     @SerializedName("geo_info")
     @Expose
-    private List<GeoInfo> geoInfo = null;
+    private GeoInfo[] geoInfo = null;
     @SerializedName("vkPostId")
     @Expose
     private Object vkPostId;
@@ -60,7 +59,7 @@ public class Datum {
     private boolean userLikes;
     @SerializedName("reposts")
     @Expose
-    private List<Object> reposts = null;
+    private Object[] reposts = null;
     @SerializedName("birthdayDiscount")
     @Expose
     private boolean birthdayDiscount;
@@ -163,27 +162,27 @@ public class Datum {
         this.organization = organization;
     }
 
-    public List<CoverInfo> getCoverInfo() {
+    public CoverInfo[] getCoverInfo() {
         return coverInfo;
     }
 
-    public void setCoverInfo(List<CoverInfo> coverInfo) {
+    public void setCoverInfo(CoverInfo[] coverInfo) {
         this.coverInfo = coverInfo;
     }
 
-    public List<ContactInfo> getContactInfo() {
+    public ContactInfo[] getContactInfo() {
         return contactInfo;
     }
 
-    public void setContactInfo(List<ContactInfo> contactInfo) {
+    public void setContactInfo(ContactInfo[] contactInfo) {
         this.contactInfo = contactInfo;
     }
 
-    public List<GeoInfo> getGeoInfo() {
+    public GeoInfo[] getGeoInfo() {
         return geoInfo;
     }
 
-    public void setGeoInfo(List<GeoInfo> geoInfo) {
+    public void setGeoInfo(GeoInfo[] geoInfo) {
         this.geoInfo = geoInfo;
     }
 
@@ -219,11 +218,11 @@ public class Datum {
         this.userLikes = userLikes;
     }
 
-    public List<Object> getReposts() {
+    public Object[] getReposts() {
         return reposts;
     }
 
-    public void setReposts(List<Object> reposts) {
+    public void setReposts(Object[] reposts) {
         this.reposts = reposts;
     }
 

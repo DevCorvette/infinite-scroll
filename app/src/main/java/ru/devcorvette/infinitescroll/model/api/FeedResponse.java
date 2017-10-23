@@ -1,7 +1,6 @@
 
 package ru.devcorvette.infinitescroll.model.api;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -15,10 +14,10 @@ public class FeedResponse {
     private String info;
     @SerializedName("data")
     @Expose
-    private List<Datum> data = null;
+    private Datum [] data;
     @SerializedName("categories")
     @Expose
-    private List<Category> categories = null;
+    private Category[] categories;
 
     public boolean isSuccess() {
         return success;
@@ -36,19 +35,19 @@ public class FeedResponse {
         this.info = info;
     }
 
-    public List<Datum> getData() {
+    public Datum[] getData() {
         return data;
     }
 
-    public void setData(List<Datum> data) {
+    public void setData(Datum[] data) {
         this.data = data;
     }
 
-    public List<Category> getCategories() {
+    public Category[] getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(Category[] categories) {
         this.categories = categories;
     }
 

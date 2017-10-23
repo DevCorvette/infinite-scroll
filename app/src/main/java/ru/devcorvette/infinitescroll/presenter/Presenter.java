@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import java.util.List;
 
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.model.api.FeedResponse;
 import ru.devcorvette.infinitescroll.view.IView;
 import ru.devcorvette.infinitescroll.model.IModel;
 import rx.Subscription;
@@ -30,6 +29,7 @@ public class Presenter implements IPresenter {
 
     @Override
     public void onCreate() {
+        view.onCreate();
         viewSubscription = view.getObservable().subscribe(new Action1<Integer>() {
             @Override
             public void call(Integer i) {
@@ -56,8 +56,8 @@ public class Presenter implements IPresenter {
         }
     }
 
-    private void showData(List<Bitmap> list) {
-        //вызывает необходимые методы у отображения
+    private void showData(List<Bitmap> bitmaps) {
+        view.showBitmaps(bitmaps);
     }
 
     /**

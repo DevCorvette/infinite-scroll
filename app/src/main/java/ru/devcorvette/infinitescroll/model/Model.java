@@ -23,17 +23,18 @@ public class Model implements IModel {
     private Activity activity;
     private PublishSubject<List<Bitmap>> subject;
 
-    private int take = 25;
+    private int take = 5;
 
     private ApiService api = RetroClient.getApiService();
 
     public Model(Activity activity) {
         this.activity = activity;
+        subject = PublishSubject.create();
     }
 
     @Override
     public PublishSubject<List<Bitmap>> getObservable() {
-        return subject = PublishSubject.create();
+        return subject;
     }
 
     @Override
@@ -62,10 +63,10 @@ public class Model implements IModel {
     private List<Bitmap> loadBitmaps(final FeedResponse feedResponse) {
         List<Bitmap> bitmaps = new ArrayList<>();
 
-        List<Datum> data = feedResponse.getData();
+        Datum[] data = feedResponse.getData();
         for (Datum datum : data) {
 
-            List<CoverInfo> coversInfo = datum.getCoverInfo();
+            CoverInfo[] coversInfo = datum.getCoverInfo();
             for (CoverInfo info : coversInfo) {
                 addBitmapToList(info.getImage(), bitmaps);
             }
