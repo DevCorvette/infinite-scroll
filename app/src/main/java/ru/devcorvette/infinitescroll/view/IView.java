@@ -1,9 +1,8 @@
 package ru.devcorvette.infinitescroll.view;
 
-import android.graphics.Bitmap;
-
 import java.util.List;
 
+import ru.devcorvette.infinitescroll.model.api.Datum;
 import rx.Observable;
 
 public interface IView {
@@ -12,27 +11,24 @@ public interface IView {
 
     Observable<Integer> getObservable();
 
+    /**
+     * Вызывает метод загрузки данных.
+     */
     void needData();
 
     /**
      * Показывает информационное сообщение.
-     *
-     * @param message message
      */
     void showMessage(String message);
 
     /**
      * Показывает/скрывает процесс загрузки данных.
-     *
-     * @param visible visible
      */
     void setProgressVisibility(boolean visible);
 
     /**
-     *
-     *
-     * @param bitmaps
+     * Отображает данные.
      */
-    void showBitmaps(List<Bitmap> bitmaps);
+    void showData(List<Datum> data);
 
 }

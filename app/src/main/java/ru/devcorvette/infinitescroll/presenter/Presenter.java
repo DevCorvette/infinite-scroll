@@ -2,12 +2,15 @@ package ru.devcorvette.infinitescroll.presenter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
+import android.util.Log;
 
-import java.util.List;
+import java.util.Arrays;
 
+import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.R;
+import ru.devcorvette.infinitescroll.model.api.Datum;
+import ru.devcorvette.infinitescroll.model.api.FeedResponse;
 import ru.devcorvette.infinitescroll.view.IView;
 import ru.devcorvette.infinitescroll.model.IModel;
 import rx.Subscription;
@@ -20,6 +23,12 @@ public class Presenter implements IPresenter {
 
     private Subscription viewSubscription;
     private Subscription modelSubscription;
+
+    private boolean isLoad = false;
+
+    private static final String TAG = "my_debug_" + Presenter.class.getSimpleName();
+
+    private int take = 9;
 
     public Presenter(IView view, IModel model, Activity activity) {
         this.view = view;
@@ -37,12 +46,14 @@ public class Presenter implements IPresenter {
             }
         });
 
-        modelSubscription = model.getObservable().subscribe(new Action1<List<Bitmap>>() {
+        modelSubscription = model.getObservable().subscribe(new Action1<FeedResponse>() {
             @Override
-            public void call(List<Bitmap> list) {
-                showData(list);
+            public void call(FeedResponse feedResponse) {
+                showData(feedResponse);
             }
         });
+
+        loadData(0);
     }
 
     @Override
@@ -56,28 +67,40 @@ public class Presenter implements IPresenter {
         }
     }
 
-    private void showData(List<Bitmap> bitmaps) {
-        view.showBitmaps(bitmaps);
+    /**
+     * Загружает данные.
+     * Старт процесса отображения загрузки.
+     */
+    private void loadData(int skip) {
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "load data skip == " + skip);
+        }
+
+        if (!isLoad && checkConnection()) {
+            changeLoadProgress(true);
+            model.loadData(skip, take);
+        }
     }
 
     /**
-     * Загружает данные,
-     * уведомляет пользователя, если данные не загружены.
-     * Вызывает отображение прогресса загрузки.
-     *
-     * @param skip skip
+     * Отображает данные во view.
+     * Завершение отображения процесса загрузки.
      */
-    private void loadData(int skip) {
-        if (checkConnection()){
-            try {
+    private void showData(FeedResponse feedResponse) {
+        changeLoadProgress(false);
 
-                view.setProgressVisibility(true);
-                model.loadData(skip);
-                view.setProgressVisibility(false);
+        if (feedResponse == null) {
+            return;
+        }
 
-            } catch (RuntimeException e) {
-                view.showMessage(e.getMessage());
-            }
+        Datum[] data = feedResponse.getData();
+
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "showData feedResponse.getData() == " + data.length);
+        }
+
+        if (data != null && data.length > 0) {
+            view.showData(Arrays.asList(data));
         }
     }
 
@@ -86,14 +109,30 @@ public class Presenter implements IPresenter {
      * Уведомляет пользователя, если соединение отсутствует.
      */
     private boolean checkConnection() {
+        boolean result;
+
         if (((ConnectivityManager) activity
                 .getApplicationContext()
                 .getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getActiveNetworkInfo() != null) {
-            return true;
+            result = true;
         } else {
             view.showMessage(activity.getString(R.string.internet_connection_not_available));
-            return false;
+            result = false;
         }
+
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "internet connection == " + result);
+        }
+        return  result;
+    }
+
+    /**
+     * Меняет значение переменной isLoad.
+     * Вызывает/Завершает процесс отображения загрузки данных.
+     */
+    private void changeLoadProgress(boolean progress){
+        isLoad = progress;
+        view.setProgressVisibility(progress);
     }
 }

@@ -8,7 +8,7 @@ import ru.devcorvette.infinitescroll.R;
 import ru.devcorvette.infinitescroll.model.IModel;
 import ru.devcorvette.infinitescroll.model.Model;
 import ru.devcorvette.infinitescroll.view.IView;
-import ru.devcorvette.infinitescroll.view.View;
+import ru.devcorvette.infinitescroll.view.ViewImplementer;
 
 public class MainActivity extends Activity {
     private IPresenter presenter;
@@ -18,10 +18,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list_view);
+        setContentView(R.layout.recycler_view);
 
-        view = new View(this);
-        model = new Model(this);
+        view = new ViewImplementer(this);
+        model = new Model();
         presenter = new Presenter(view, model, this);
 
         presenter.onCreate();
