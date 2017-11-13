@@ -22,9 +22,9 @@ public interface IView {
     void showMessage(String message);
 
     /**
-     * Показывает/скрывает процесс загрузки данных.
+     * Показывает процесс загрузки данных.
      */
-    void setProgressVisibility(boolean visible);
+    void setProgressVisible();
 
     /**
      * Отображает данные.

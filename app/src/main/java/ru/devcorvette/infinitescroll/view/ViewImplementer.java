@@ -35,7 +35,7 @@ public class ViewImplementer implements IView {
 
     @Override
     public void onCreate() {
-        recyclerView = (RecyclerView) activity.findViewById(R.id.recyclerView);
+        recyclerView = activity.findViewById(R.id.recyclerView);
         adapter = new DatumAdapter(datumList);
 
         recyclerView.setAdapter(adapter);
@@ -65,27 +65,22 @@ public class ViewImplementer implements IView {
                 .show();
     }
 
-    /**
-     * На данный момент работает некорректно - recyclerView прокручивает
-     * пустое пространсво под ProgressBar.
-     */
     @Override
-    public void setProgressVisibility(boolean visible) {
-        if (visible) {
-            datumList.add(null);
-            adapter.notifyItemInserted(datumList.size() - 1);
-        } else {
-            int removeItem = datumList.size();
-            datumList.remove(removeItem - 1);
-            adapter.notifyItemRemoved(removeItem);
-        }
+    public void setProgressVisible() {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                datumList.add(null);
+                adapter.notifyItemInserted(datumList.size() - 1);
+            }
+        });
     }
 
     /**
-     * Добавляет данные к datumList и вызывает обновление адаптера.
+     * Добавляет данные к datumList, удаляет прогресс бар и вызывает обновление адаптера.
      */
     @Override
-    public void showData(List<Datum> data) {
+    public void showData(final List<Datum> data) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "showData datumList.size == "
                     + datumList.size()
@@ -93,8 +88,21 @@ public class ViewImplementer implements IView {
                     + data.size());
         }
 
-        int oldSize = datumList.size();
-        datumList.addAll(data);
-        adapter.notifyItemRangeChanged(oldSize, datumList.size());
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                int progressItem = datumList.size() - 1;
+                int dataSize = data.size();
+
+                datumList.remove(progressItem);
+                datumList.addAll(data);
+
+                if(dataSize == 0){
+                    adapter.notifyItemRemoved(progressItem);
+                } else {
+                    adapter.notifyItemRangeChanged(progressItem, dataSize);
+                }
+            }
+        });
     }
 }

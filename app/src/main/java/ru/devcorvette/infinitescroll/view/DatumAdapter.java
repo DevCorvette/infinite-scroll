@@ -46,7 +46,6 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     .from(parent.getContext())
                     .inflate(R.layout.progress_bar, parent, false));
         }
-
         return viewHolder;
     }
 
@@ -104,19 +103,20 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         ViewHolder(View itemView) {
             super(itemView);
-            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.imageView);
         }
     }
 
     /**
      * Содержит экземпляр ProgressBar.
+     * Расширяет progressBar на все столбцы StaggeredGridLayoutManager.
      */
     static class ProgressHolder extends RecyclerView.ViewHolder {
         ProgressBar progressBar;
 
         ProgressHolder(View itemView) {
             super(itemView);
-            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
+            progressBar = itemView.findViewById(R.id.progressBar);
 
             StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
             layoutParams.setFullSpan(true);

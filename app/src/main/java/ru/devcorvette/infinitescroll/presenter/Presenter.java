@@ -5,7 +5,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.R;
@@ -77,7 +79,9 @@ public class Presenter implements IPresenter {
         }
 
         if (!isLoad && checkConnection()) {
-            changeLoadProgress(true);
+            isLoad = true;
+            view.setProgressVisible();
+
             model.loadData(skip, take);
         }
     }
@@ -87,21 +91,8 @@ public class Presenter implements IPresenter {
      * Завершение отображения процесса загрузки.
      */
     private void showData(FeedResponse feedResponse) {
-        changeLoadProgress(false);
-
-        if (feedResponse == null) {
-            return;
-        }
-
-        Datum[] data = feedResponse.getData();
-
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "showData feedResponse.getData() == " + data.length);
-        }
-
-        if (data != null && data.length > 0) {
-            view.showData(Arrays.asList(data));
-        }
+        view.showData(getDataList(feedResponse));
+        isLoad = false;
     }
 
     /**
@@ -124,15 +115,27 @@ public class Presenter implements IPresenter {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "internet connection == " + result);
         }
-        return  result;
+        return result;
     }
 
     /**
-     * Меняет значение переменной isLoad.
-     * Вызывает/Завершает процесс отображения загрузки данных.
+     * Извлекает из feedResponse Datum[] и преобразует в List.
+     *
+     * @return result с данными, если данных нет, то result пустой.
      */
-    private void changeLoadProgress(boolean progress){
-        isLoad = progress;
-        view.setProgressVisibility(progress);
+    private List<Datum> getDataList(FeedResponse feedResponse) {
+        List<Datum> result;
+        Datum[] data;
+
+        if (feedResponse == null) {
+            result = new ArrayList<>();
+
+        } else if ((data = feedResponse.getData()) == null) {
+            result = new ArrayList<>();
+
+        } else {
+            result = Arrays.asList(data);
+        }
+        return result;
     }
 }
