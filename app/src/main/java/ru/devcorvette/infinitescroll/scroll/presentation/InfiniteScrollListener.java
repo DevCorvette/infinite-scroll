@@ -1,22 +1,21 @@
-package ru.devcorvette.infinitescroll.view;
+package ru.devcorvette.infinitescroll.scroll.presentation;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
+import javax.inject.Inject;
+
 import ru.devcorvette.infinitescroll.BuildConfig;
 
 /**
- * Вызывает метод загрузки данных у IView.
+ * Вызывает метод загрузки данных у IScrollPresenter.
  */
 public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
-    private IView mainView;
+    @Inject
+    IScrollPresenter presenter;
 
     private static final String TAG = "my_debug_" + InfiniteScrollListener.class.getSimpleName();
-
-    public InfiniteScrollListener(IView mainView) {
-        this.mainView = mainView;
-    }
 
     /**
      * Вызывается только при прокурутки вниз.
@@ -35,7 +34,7 @@ public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         int firstVisibleItems = staggeredManager.findFirstVisibleItemPositions(null)[0];
 
         if ((visibleItemCount + firstVisibleItems) >= totalItemCount) {
-            mainView.needData();
+            presenter.needData();
         }
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "onScroll visibleItemCount == "
@@ -54,9 +53,9 @@ public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         if (recyclerView.getLayoutManager().getItemCount() == 0) {
             if (BuildConfig.DEBUG) {
-                Log.d(TAG, "item count == 0. IView call need data.");
+                Log.d(TAG, "item count == 0. Call need data.");
             }
-            mainView.needData();
+            presenter.needData();
         }
     }
 }

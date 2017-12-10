@@ -1,5 +1,5 @@
 
-package ru.devcorvette.infinitescroll.model.api;
+package ru.devcorvette.infinitescroll.scroll.logic.entity;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

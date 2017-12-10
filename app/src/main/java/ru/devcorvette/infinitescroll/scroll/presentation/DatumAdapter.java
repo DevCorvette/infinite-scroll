@@ -1,4 +1,4 @@
-package ru.devcorvette.infinitescroll.view;
+package ru.devcorvette.infinitescroll.scroll.presentation;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -9,11 +9,14 @@ import android.widget.ProgressBar;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.model.api.Datum;
+import ru.devcorvette.infinitescroll.scroll.logic.entity.Datum;
 
 /**
  * Привязывает изображения из data к image_view.
@@ -22,13 +25,10 @@ import ru.devcorvette.infinitescroll.model.api.Datum;
 public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final int VIEW_ITEM = 0;
     private final int PROGRESS_ITEM = 1;
-    private List<Datum> data;
+
+    private List<Datum> data = new ArrayList<>();
 
     private static final String TAG = "my_debug_" + DatumAdapter.class.getSimpleName();
-
-    public DatumAdapter(List<Datum> data) {
-        this.data = data;
-    }
 
     /**
      * В зависимости от viewType создает ViewHolder или ProgressView.
@@ -59,7 +59,7 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (holder instanceof ViewHolder) {
 
             ImageView imageView = ((ViewHolder) holder).imageView;
-            String imageURL = data.get(position).getCoverInfo()[0].getImage();
+            String imageURL = getData().get(position).getCoverInfo()[0].getImage();
             loadImage(imageView, imageURL);
 
         } else if (holder instanceof ProgressHolder) {
@@ -71,12 +71,12 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return getData().size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        return data.get(position) != null ? VIEW_ITEM : PROGRESS_ITEM;
+        return getData().get(position) != null ? VIEW_ITEM : PROGRESS_ITEM;
     }
 
     /**
@@ -93,6 +93,10 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "load image " + imageURL);
         }
+    }
+
+    public List<Datum> getData(){
+        return data;
     }
 
     /**
