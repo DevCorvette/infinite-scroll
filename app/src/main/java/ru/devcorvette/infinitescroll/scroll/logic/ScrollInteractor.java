@@ -2,69 +2,77 @@ package ru.devcorvette.infinitescroll.scroll.logic;
 
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.scroll.logic.entity.Datum;
-import ru.devcorvette.infinitescroll.scroll.logic.entity.FeedResponse;
+import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.base.logic.BaseInteractor;
+import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
-import rx.Subscription;
-import rx.functions.Action1;
 
-public class ScrollInteractor implements IScrollInteractor {
-
-    private static final String TAG = "my_debug_" + ScrollInteractor.class.getSimpleName();
+/**
+ * todo
+ */
+public class ScrollInteractor extends BaseInteractor implements IScrollInteractor {
+    private static final String TAG = Router.TAG + ScrollInteractor.class.getSimpleName();
 
     @Inject IScrollPresenter presenter;
 
-    @Inject DataService dataService;
-
-    private int take = 9;
-
-    private Subscription dataSubscription;
-
-    private void subscribe(){
-        dataSubscription = dataService.getObservable().subscribe(new Action1<FeedResponse>() {
-            @Override
-            public void call(FeedResponse feedResponse) {
-                presenter.setData(extractionData(feedResponse));
-            }
-        });
-    }
+    private boolean isLoad = false;
 
     @Override
-    public void loadData(int skip) {
-        if(BuildConfig.DEBUG){
-            Log.d(TAG, "load data");
+    public void needData(int skip) {
+        if(!isLoad) {
+            isLoad = true;
+            int size = getData().size();
+
+            if(BuildConfig.DEBUG) Log.d(TAG, "need data. skip == " + skip + " data.size == " + size);
+
+            if(skip < size){
+                update(skip, size - skip);
+            } else {
+                loadData(skip);
+            }
         }
-        if (dataSubscription == null){
-            subscribe();
-        }
-        dataService.loadData(skip, take);
     }
 
     /**
-     * Извлекает из feedResponse Datum[] и преобразует в List.
-     *
-     * @return result с данными, если данных нет, то result пустой.
+     * todo
      */
-    private List<Datum> extractionData(FeedResponse feedResponse) {
-        List<Datum> result;
-        Datum[] data;
+    protected void loadData(int skip){
+        presenter.showProgress();
+        super.loadData(skip);
+    }
 
-        if (feedResponse == null) {
-            result = new ArrayList<>();
+    /**
+     * todo
+     */
+    protected void update(int startItem, int countItem){
+        presenter.updateView(startItem, countItem);
+        isLoad = false;
+    }
 
-        } else if ((data = feedResponse.getData()) == null) {
-            result = new ArrayList<>();
+    /**
+     * todo
+     */
+    @Override
+    protected void setData(List<Datum> downloadedData){
+        int startItem = getData().size();
+        int countItem = downloadedData.size();
+        //todo need refactor hear
+//        getData().remove(startItem - 1);
 
-        } else {
-            result = Arrays.asList(data);
-        }
-        return result;
+        super.setData(downloadedData);
+        update(startItem, countItem);
+    }
+
+    protected void showServerError(){
+        presenter.showServerError();
+    }
+
+    protected void showConnectError(){
+        presenter.showConnectError();
     }
 }

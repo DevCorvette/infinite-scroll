@@ -4,6 +4,7 @@ package ru.devcorvette.infinitescroll;
  * Отвечает за навигацию между модулями.
  */
 public interface Router {
+    String TAG = "my_debug_";
 
     /**
      * Перейти на главное окно.
@@ -11,9 +12,9 @@ public interface Router {
     void showScroll();
 
     /**
-     * Перейти на окно карточки.
+     * Перейти на окно страницы pageNumber.
      */
-    void showCard();
+    void showPage(int pageNumber);
 
     /**
      * Отображает сообщение об отсутвии соединения.

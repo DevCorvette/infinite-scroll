@@ -1,11 +1,9 @@
-package ru.devcorvette.infinitescroll.scroll.logic;
+package ru.devcorvette.infinitescroll.base.logic;
 
 import android.util.Log;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-
-import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,9 +13,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.scroll.logic.entity.FeedRequest;
-import ru.devcorvette.infinitescroll.scroll.logic.entity.FeedResponse;
-import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
+import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.base.logic.entity.FeedRequest;
+import ru.devcorvette.infinitescroll.base.logic.entity.FeedResponse;
 import rx.subjects.PublishSubject;
 
 /**
@@ -25,14 +23,16 @@ import rx.subjects.PublishSubject;
  */
 public class DataService {
     private static final String ROOT_URL = "http://109.111.162.236:8083/api/v2/";
-    private static final String TAG = "my_debug_" + DataService.class.getSimpleName();
+    private static final String TAG = Router.TAG + DataService.class.getSimpleName();
 
     private PublishSubject<FeedResponse> subject;
     private ApiService api = getApiService();
 
-    @Inject IScrollPresenter presenter;
+    private BaseInteractor interactor;
 
-    public DataService(){
+    public DataService(BaseInteractor interactor){
+        this.interactor = interactor;
+
         subject = PublishSubject.create();
     }
 
@@ -45,9 +45,8 @@ public class DataService {
      * @param take сколько нужно загрузить
      */
     public void loadData(int skip, int take) {
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "loadData skip == " + skip + " take == " + take);
-        }
+        if (BuildConfig.DEBUG) Log.d(TAG, "load data skip == " + skip + " take == " + take);
+
         Call<FeedResponse> call = api.getFeed(new FeedRequest(skip, take));
 
         call.enqueue(new Callback<FeedResponse>() {
@@ -62,7 +61,7 @@ public class DataService {
             }
 
             /**
-             * Сообщает презентеру об ошибке.
+             * Сообщает об ошибке.
              * Подписчику пердает null.
              */
             @Override
@@ -70,11 +69,14 @@ public class DataService {
                 Log.w(TAG, "Callback on failure == " + t.getMessage());
 
                 if(t instanceof ConnectException){
-                    presenter.showConnectError();
+                    interactor.showConnectError();
                 } else if (t instanceof SocketTimeoutException){
-                    presenter.showServerError();
-                }
+                    interactor.showServerError();
 
+                    //only for test
+                    subject.onNext(TestDataService.createFakeFeedResponse());
+                    return;
+                }
                 subject.onNext(null);
             }
         });

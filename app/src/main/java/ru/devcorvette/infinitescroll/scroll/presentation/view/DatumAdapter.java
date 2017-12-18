@@ -1,34 +1,30 @@
-package ru.devcorvette.infinitescroll.scroll.presentation;
+package ru.devcorvette.infinitescroll.scroll.presentation.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.scroll.logic.entity.Datum;
+import ru.devcorvette.infinitescroll.Router;
 
 /**
  * Привязывает изображения из data к image_view.
  * И привязывает progress bar.
  */
 public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private int itemCount = 0;
     private final int VIEW_ITEM = 0;
     private final int PROGRESS_ITEM = 1;
+    private static final String TAG = Router.TAG + DatumAdapter.class.getSimpleName();
+    private boolean isVisibleProgress = false;
 
-    private List<Datum> data = new ArrayList<>();
+    private ScrollView scrollView;
 
-    private static final String TAG = "my_debug_" + DatumAdapter.class.getSimpleName();
+    public DatumAdapter(ScrollView scrollView) {
+        this.scrollView = scrollView;
+    }
 
     /**
      * В зависимости от viewType создает ViewHolder или ProgressView.
@@ -50,8 +46,9 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     /**
-     * Для ViewHolder вытаскивает из data imageURL для отображения
-     * и загружает изображение.
+     * todo
+     * Устанавливает TouchListener.
+     *
      * Для ProgressHolder - прикрепляет прогресс бар.
      */
     @Override
@@ -59,8 +56,8 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (holder instanceof ViewHolder) {
 
             ImageView imageView = ((ViewHolder) holder).imageView;
-            String imageURL = getData().get(position).getCoverInfo()[0].getImage();
-            loadImage(imageView, imageURL);
+            scrollView.putBitmapInView(position, 0, imageView);
+            imageView.setOnTouchListener(new TouchListener(position));
 
         } else if (holder instanceof ProgressHolder) {
 
@@ -71,38 +68,34 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return getData().size();
+        return itemCount;
+    }
+
+    public void setItemCount(int itemCount) {
+        this.itemCount = itemCount;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return getData().get(position) != null ? VIEW_ITEM : PROGRESS_ITEM;
+        return position == itemCount - 1 && isVisibleProgress ? PROGRESS_ITEM : VIEW_ITEM;
     }
 
     /**
-     * Загружает изображения при помощи Picasso и помещает в imageView.
+     * todo
      */
-    private void loadImage(ImageView imageView, String imageURL) {
-        Picasso.with(imageView.getContext())
-                .load(imageURL)
-                .placeholder(R.drawable.rectangle)
-                .fit()
-                .centerInside()
-                .into(imageView);
-
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "load image " + imageURL);
+    public void setVisibleProgress(boolean isVisibleProgress) {
+        if (isVisibleProgress){
+            itemCount++;
+        } else {
+            itemCount--;
         }
-    }
-
-    public List<Datum> getData(){
-        return data;
+        this.isVisibleProgress = isVisibleProgress;
     }
 
     /**
      * Содержит экземпляр ImageView.
      */
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
 
         ViewHolder(View itemView) {
@@ -115,7 +108,7 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
      * Содержит экземпляр ProgressBar.
      * Расширяет progressBar на все столбцы StaggeredGridLayoutManager.
      */
-    static class ProgressHolder extends RecyclerView.ViewHolder {
+    class ProgressHolder extends RecyclerView.ViewHolder {
         ProgressBar progressBar;
 
         ProgressHolder(View itemView) {
@@ -124,6 +117,22 @@ public class DatumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             StaggeredGridLayoutManager.LayoutParams layoutParams = (StaggeredGridLayoutManager.LayoutParams) itemView.getLayoutParams();
             layoutParams.setFullSpan(true);
+        }
+    }
+
+    /**
+     * todo
+     */
+    class TouchListener implements View.OnTouchListener {
+        private final int position;
+
+        public TouchListener(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            return true;
         }
     }
 }

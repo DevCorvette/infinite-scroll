@@ -1,28 +1,26 @@
 package ru.devcorvette.infinitescroll.scroll.presentation;
 
-import java.util.List;
-
-import ru.devcorvette.infinitescroll.scroll.logic.entity.Datum;
+import android.widget.ImageView;
+import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 
 /**
- * Связующее звено между IScrollView, IScrollInteractor и Router.
+ * todo
  */
-public interface IScrollPresenter {
+public interface IScrollPresenter{
+    /**
+     * todo
+     */
+    void needData(int skip);
 
     /**
-     * Запрашивает данные у IScrollInteractor.
+     * todo
      */
-    void needData();
+    Datum getDatum(int itemPosition);
 
     /**
-     * Принимает загруженные данные.
+     * todo
      */
-    void setData(List<Datum> downloadedData);
-
-    /**
-     * return List<Datum>.
-     */
-    List<Datum> getData();
+    void putBitmapInView(int itemPosition, int bitmapPosition, ImageView imageView);
 
     /**
      * Передает сообщение об отсутвии интрнет соединения.
@@ -33,4 +31,14 @@ public interface IScrollPresenter {
      * Передает сообщение об ошибке сервера.
      */
     void showServerError();
+
+    /**
+     * todo
+     */
+    void updateView(int startItem, int countItem);
+
+    /**
+     * todo
+     */
+    void showProgress();
 }

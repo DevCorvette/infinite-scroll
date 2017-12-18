@@ -1,56 +1,35 @@
 package ru.devcorvette.infinitescroll.scroll.presentation;
 
-import android.util.Log;
-
-import java.util.List;
+import android.widget.ImageView;
 
 import javax.inject.Inject;
 
-import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 import ru.devcorvette.infinitescroll.scroll.logic.IScrollInteractor;
-import ru.devcorvette.infinitescroll.scroll.logic.entity.Datum;
+import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
 
 public class ScrollPresenter implements IScrollPresenter {
-    private static final String TAG = "my_debug_" + ScrollPresenter.class.getSimpleName();
-
-    private boolean isLoad = false;
-
-    @Inject IScrollInteractor interactor;
 
     @Inject IScrollView scrollView;
 
+    @Inject IScrollInteractor interactor;
+
     @Inject Router router;
 
-    @Inject DatumAdapter datumAdapter;
-
     @Override
-    public void needData() {
-        if(!isLoad) {
-            if(BuildConfig.DEBUG){
-                Log.d(TAG, "need data");
-            }
-
-            isLoad = true;
-            int size = getData().size();
-            scrollView.addProgressItem();
-            interactor.loadData(size);
-        }
+    public void needData(int skip) {
+        interactor.needData(skip);
     }
 
     @Override
-    public void setData(List<Datum> downloadedData) {
-        if(BuildConfig.DEBUG){
-            Log.d(TAG, "set data");
-        }
-
-        scrollView.setData(downloadedData);
-        isLoad = false;
+    public void putBitmapInView(int itemPosition, int bitmapPosition, ImageView imageView) {
+        interactor.putBitmapInView(itemPosition, bitmapPosition, imageView);
     }
 
     @Override
-    public List<Datum> getData() {
-        return datumAdapter.getData();
+    public Datum getDatum(int itemPosition) {
+        return interactor.getDatum(itemPosition);
     }
 
     @Override
@@ -61,5 +40,15 @@ public class ScrollPresenter implements IScrollPresenter {
     @Override
     public void showServerError() {
         router.showServerError();
+    }
+
+    @Override
+    public void updateView(int startItem, int countItem) {
+        scrollView.updateView(startItem, countItem);
+    }
+
+    @Override
+    public void showProgress() {
+        scrollView.showProgressItem();
     }
 }

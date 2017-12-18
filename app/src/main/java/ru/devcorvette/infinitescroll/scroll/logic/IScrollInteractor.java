@@ -1,13 +1,14 @@
 package ru.devcorvette.infinitescroll.scroll.logic;
 
+import ru.devcorvette.infinitescroll.base.logic.IBaseInteractor;
+
 /**
- * Загружает данные с удаленного адреса.
+ * todo
  */
-public interface IScrollInteractor {
+public interface IScrollInteractor extends IBaseInteractor {
 
     /**
-     * Загружает данные.
-     * @param skip сколько уже загружено - нужно пропустить
+     * todo
      */
-    void loadData(int skip);
+    void needData(int skip);
 }

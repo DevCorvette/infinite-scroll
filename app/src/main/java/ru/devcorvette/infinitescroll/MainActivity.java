@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.assembly.Assembly;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
-import ru.devcorvette.infinitescroll.scroll.presentation.IScrollView;
+import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
 
 public class MainActivity extends AppCompatActivity implements Router {
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements Router {
     }
 
     @Override
-    public void showCard() {
+    public void showPage(int pageNumber) {
 
     }
 
