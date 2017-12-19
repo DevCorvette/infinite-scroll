@@ -8,7 +8,7 @@ import ru.devcorvette.infinitescroll.base.logic.entity.FeedResponse;
  * Только для тестирования, если сервер http://109.111.162.236:8083/api/v2/ не работает.
  * Создает FeedResponse c Datum и ссылками на фото.
  */
-public class TestDataService {
+class TestDataService {
 
     private static String[][] urls = new String[][]{
             { "http://i1.2photo.ru/medium/w/7/727340.jpg",

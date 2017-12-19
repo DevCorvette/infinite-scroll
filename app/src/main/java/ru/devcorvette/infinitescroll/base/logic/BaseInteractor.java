@@ -1,11 +1,8 @@
 package ru.devcorvette.infinitescroll.base.logic;
 
-import android.graphics.Bitmap;
-
 import java.util.*;
 
 import android.util.Log;
-import android.widget.ImageView;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.Router;
@@ -17,13 +14,13 @@ import rx.functions.Action1;
 public abstract class BaseInteractor implements IBaseInteractor {
     private static final String TAG = Router.TAG + BaseInteractor.class.getSimpleName();
 
-    private static final List<Datum> DATA = new ArrayList<>();
-    private static final Map<Datum, Bitmap[]> BITMAPS = new HashMap<>();
+    private static final List<Datum> MAIN_DATA = new ArrayList<>();
 
-    private DataService dataService = new DataService(this);
-    private BitmapService bitmapService = new BitmapService(BITMAPS);
+    private boolean isLoad = false;
 
     private int take = 9;
+
+    private DataService dataService = new DataService(this);
 
     private Subscription dataSubscription;
 
@@ -36,26 +33,60 @@ public abstract class BaseInteractor implements IBaseInteractor {
         });
     }
 
+    @Override
+    public void needUpdateData(int skip) {
+        if(!isLoad) {
+            isLoad = true;
+            int size = MAIN_DATA.size();
+
+            if(BuildConfig.DEBUG) Log.d(TAG, "need data. skip == " + skip + " data.size == " + size);
+
+            if(skip < size){
+                finishUpdate(skip, size - skip);
+            } else {
+                loadData(skip);
+            }
+        }
+    }
+
     /**
-     * todo
+     * Загружает данные через DataService.
      */
     protected void loadData(int skip){
         if(dataSubscription == null) subscribe();
 
+        showProgress();
         dataService.loadData(skip, take);
     }
 
     /**
-     * todo
+     * Завершение обновления.
+     */
+    protected void finishUpdate(int startItem, int countItem){
+        isLoad = false;
+        convertDataForView(startItem, countItem);
+    }
+
+    /**
+     * Добавляет загруженные данные.
      */
     protected void setData(List<Datum> downloadedData){
         if(BuildConfig.DEBUG) {
-            Log.d(TAG, "set data. oldData.size == " + DATA.size()
+            Log.d(TAG, "set data. oldData.size == " + MAIN_DATA.size()
                     + " downloadedData.size == " + downloadedData.size());
         }
+        int startItem = MAIN_DATA.size();
+        int itemCount = downloadedData.size();
+        MAIN_DATA.addAll(downloadedData);
 
-        DATA.addAll(downloadedData);
-        bitmapService.setBitmaps(downloadedData);
+        finishUpdate(startItem, itemCount);
+    }
+
+    /**
+     * @param datumPosition позиция в списке MAIN_DATA.
+     */
+    protected Datum getDatum(int datumPosition){
+        return MAIN_DATA.get(datumPosition);
     }
 
     /**
@@ -63,7 +94,7 @@ public abstract class BaseInteractor implements IBaseInteractor {
      *
      * @return result с данными, если данных нет, то result пустой.
      */
-    private List<Datum> extractionData(FeedResponse feedResponse) {
+    protected List<Datum> extractionData(FeedResponse feedResponse) {
         List<Datum> result;
         Datum[] data;
 
@@ -79,27 +110,23 @@ public abstract class BaseInteractor implements IBaseInteractor {
         return result;
     }
 
-    @Override
-    public Datum getDatum(int itemPosition) {
-        return DATA.get(itemPosition);
-    }
+    /**
+     * Запускает отображение прогресса.
+     */
+    protected abstract void showProgress();
 
-    @Override
-    public void putBitmapInView(int itemPosition, int bitmapPosition, ImageView imageView){
-        bitmapService.putBitmapInView(DATA.get(itemPosition), bitmapPosition, imageView);
-    }
+    /**
+     * Преобразованиея данных для дальнейшего отображения.
+     */
+    protected abstract void convertDataForView(int startItem, int countItem);
 
-    @Override
-    public void getBitmapsCount(int itemPosition) {
-
-    }
-
-    protected List<Datum> getData() {
-        return DATA;
-    }
-
+    /**
+     * Call presenter to report server error.
+     */
     protected abstract void showServerError();
 
+    /**
+     * Call presenter to report connect error.
+     */
     protected abstract void showConnectError();
-
 }

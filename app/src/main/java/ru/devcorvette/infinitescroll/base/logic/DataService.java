@@ -21,7 +21,7 @@ import rx.subjects.PublishSubject;
 /**
  * Загружает данные используя Retrofit, отдает их подписчику.
  */
-public class DataService {
+class DataService {
     private static final String ROOT_URL = "http://109.111.162.236:8083/api/v2/";
     private static final String TAG = Router.TAG + DataService.class.getSimpleName();
 
@@ -30,13 +30,13 @@ public class DataService {
 
     private BaseInteractor interactor;
 
-    public DataService(BaseInteractor interactor){
+    DataService(BaseInteractor interactor){
         this.interactor = interactor;
 
         subject = PublishSubject.create();
     }
 
-    public PublishSubject<FeedResponse> getObservable() {
+    PublishSubject<FeedResponse> getObservable() {
         return subject;
     }
 
@@ -44,7 +44,7 @@ public class DataService {
      * @param skip сколько уже загружено - нужно пропустить
      * @param take сколько нужно загрузить
      */
-    public void loadData(int skip, int take) {
+    void loadData(int skip, int take) {
         if (BuildConfig.DEBUG) Log.d(TAG, "load data skip == " + skip + " take == " + take);
 
         Call<FeedResponse> call = api.getFeed(new FeedRequest(skip, take));

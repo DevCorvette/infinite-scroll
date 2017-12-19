@@ -39,12 +39,16 @@ public class MainActivity extends AppCompatActivity implements Router {
     }
 
     /**
-     * Add fragment to the back stack.
+     * Присоединяет фрагмент.
+     * @param isBackStack если true, добавляет в  back stack.
      */
-    private void addBackStack(Fragment fragment){
+    private void addFragment(Fragment fragment, boolean isBackStack){
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
         tx.add(R.id.fragmentContent, fragment);
-        tx.addToBackStack(fragment.toString());
+
+        if(isBackStack) {
+            tx.addToBackStack(fragment.toString());
+        }
         tx.commit();
     }
 
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements Router {
 
     @Override
     public void showScroll() {
-        addBackStack((Fragment) scrollView);
+        addFragment((Fragment) scrollView, false);
     }
 
     @Override

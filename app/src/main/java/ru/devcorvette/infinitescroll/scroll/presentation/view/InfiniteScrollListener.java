@@ -10,7 +10,7 @@ import ru.devcorvette.infinitescroll.Router;
 /**
  * Вызывает метод загрузки данных.
  */
-public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
+class InfiniteScrollListener extends RecyclerView.OnScrollListener {
     private ScrollView scrollView;
 
     public InfiniteScrollListener(ScrollView scrollView) {
@@ -36,7 +36,7 @@ public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         int firstVisibleItems = staggeredManager.findFirstVisibleItemPositions(null)[0];
 
         if ((visibleItemCount + firstVisibleItems) >= totalItemCount) {
-            scrollView.needData();
+            scrollView.needUpdateData();
         }
 //        if (BuildConfig.DEBUG) {
 //            Log.d(TAG, "onScroll visibleItemCount == "
@@ -56,7 +56,7 @@ public class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         if (recyclerView.getLayoutManager().getItemCount() == 0) {
             if (BuildConfig.DEBUG) Log.d(TAG, "item count == 0. Call need data.");
 
-            scrollView.needData();
+            scrollView.needUpdateData();
         }
     }
 }

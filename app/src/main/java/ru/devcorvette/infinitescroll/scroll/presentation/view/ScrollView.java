@@ -10,15 +10,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.R;
 import ru.devcorvette.infinitescroll.Router;
-import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
+
+import java.util.List;
 
 public class ScrollView extends Fragment implements IScrollView {
 
@@ -40,7 +40,7 @@ public class ScrollView extends Fragment implements IScrollView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        if(BuildConfig.DEBUG) Log.d(TAG, "on create view");
+        if(BuildConfig.DEBUG) Log.d(TAG, "on create scroll view");
 
         View view = inflater.inflate(R.layout.recycler_view, container, false);
 
@@ -51,16 +51,9 @@ public class ScrollView extends Fragment implements IScrollView {
         recyclerView.setItemViewCacheSize(100);
         recyclerView.addOnScrollListener(scrollListener);
 
+        needUpdateData();
+
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        if(BuildConfig.DEBUG) Log.d(TAG, "on activity created");
-
-       needData();
     }
 
     @Override
@@ -69,35 +62,38 @@ public class ScrollView extends Fragment implements IScrollView {
     }
 
     @Override
-    public void updateView(final int itemStart, final int itemCount) {
+    public void updateView(final List<String> urls) {
         recyclerView.post(new Runnable() {
             @Override
             public void run() {
-                if(BuildConfig.DEBUG) {
-                    Log.d(TAG, "updateView. itemStart == " + itemStart + " itemCount ==" + itemCount);
-                }
 
                 adapter.setVisibleProgress(false);
-                adapter.setItemCount(adapter.getItemCount() + itemCount );
+
+                int itemStart = adapter.getItemCount();
+                int itemCount = urls.size();
+
+                adapter.setUrls(urls);
+
+                if(BuildConfig.DEBUG) {
+                    Log.d(TAG, "update view. itemStart == " + itemStart
+                            + " itemCount == " + itemCount);
+                }
 
                 if(itemCount == 0){
                     adapter.notifyItemRemoved(itemStart);
                 } else {
-                    adapter.notifyItemRangeChanged(itemStart,itemCount);
+                    adapter.notifyItemRangeChanged(itemStart, itemCount);
                 }
             }
         });
     }
 
-    /**
-     * todo
-     */
     @Override
-    public void showProgressItem() {
+    public void showProgress() {
         recyclerView.post(new Runnable() {
             @Override
             public void run() {
-                if(BuildConfig.DEBUG) Log.d(TAG, "show progress item");
+                if(BuildConfig.DEBUG) Log.d(TAG, "show progress");
 
                 adapter.setVisibleProgress(true);
                 adapter.notifyItemInserted(adapter.getItemCount());
@@ -105,21 +101,17 @@ public class ScrollView extends Fragment implements IScrollView {
         });
     }
 
-    void needData(){
-        presenter.needData(adapter.getItemCount());
+    /**
+     * Запрос на новые данные.
+     */
+    void needUpdateData(){
+        presenter.needUpdateData(adapter.getItemCount());
     }
 
     /**
-     * todo
+     * Вызвать отображение модуля страницы.
      */
-    Datum getDatum(int position) {
-        return presenter.getDatum(position);
-    }
-
-    /**
-     * todo
-     */
-    void putBitmapInView(int itemPosition, int bitmapPosition, ImageView imageView) {
-        presenter.putBitmapInView(itemPosition, bitmapPosition, imageView);
+    void showPage(int page){
+        presenter.showPage(page);
     }
 }

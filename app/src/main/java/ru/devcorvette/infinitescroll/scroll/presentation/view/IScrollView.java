@@ -1,18 +1,19 @@
 package ru.devcorvette.infinitescroll.scroll.presentation.view;
 
+import java.util.List;
+
 /**
- * Отображение главного окна прокрутки.
+ * Scroll module view.
  */
 public interface IScrollView {
+    /**
+     * Добавляет новые данные для отображения.
+     */
+    void updateView(List<String> urls);
 
     /**
-     * todo
+     * Отображает progress bar.
      */
-    void updateView(int startItem, int countItem);
-
-    /**
-     * todo
-     */
-    void showProgressItem();
+    void showProgress();
 }
 

@@ -1,13 +1,12 @@
 package ru.devcorvette.infinitescroll.scroll.presentation;
 
-import android.widget.ImageView;
-
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.Router;
-import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 import ru.devcorvette.infinitescroll.scroll.logic.IScrollInteractor;
 import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
+
+import java.util.List;
 
 public class ScrollPresenter implements IScrollPresenter {
 
@@ -18,18 +17,18 @@ public class ScrollPresenter implements IScrollPresenter {
     @Inject Router router;
 
     @Override
-    public void needData(int skip) {
-        interactor.needData(skip);
+    public void needUpdateData(int skip) {
+        interactor.needUpdateData(skip);
     }
 
     @Override
-    public void putBitmapInView(int itemPosition, int bitmapPosition, ImageView imageView) {
-        interactor.putBitmapInView(itemPosition, bitmapPosition, imageView);
+    public void updateView(List<String> urls) {
+        scrollView.updateView(urls);
     }
 
     @Override
-    public Datum getDatum(int itemPosition) {
-        return interactor.getDatum(itemPosition);
+    public void showPage(int page) {
+        router.showPage(page);
     }
 
     @Override
@@ -43,12 +42,7 @@ public class ScrollPresenter implements IScrollPresenter {
     }
 
     @Override
-    public void updateView(int startItem, int countItem) {
-        scrollView.updateView(startItem, countItem);
-    }
-
-    @Override
     public void showProgress() {
-        scrollView.showProgressItem();
+        scrollView.showProgress();
     }
 }

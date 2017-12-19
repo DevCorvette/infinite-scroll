@@ -1,26 +1,30 @@
 package ru.devcorvette.infinitescroll.scroll.presentation;
 
-import android.widget.ImageView;
-import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
+import java.util.List;
 
 /**
- * todo
+ * Scroll module presenter.
  */
 public interface IScrollPresenter{
     /**
-     * todo
+     * Запрос на обновление данных у interactor.
      */
-    void needData(int skip);
+    void needUpdateData(int skip);
 
     /**
-     * todo
+     * Передает новые данные во view.
      */
-    Datum getDatum(int itemPosition);
+    void updateView(List<String> urls);
 
     /**
-     * todo
+     * Показывает progress bar.
      */
-    void putBitmapInView(int itemPosition, int bitmapPosition, ImageView imageView);
+    void showProgress();
+
+    /**
+     * Call show page module.
+     */
+    void showPage(int page);
 
     /**
      * Передает сообщение об отсутвии интрнет соединения.
@@ -31,14 +35,4 @@ public interface IScrollPresenter{
      * Передает сообщение об ошибке сервера.
      */
     void showServerError();
-
-    /**
-     * todo
-     */
-    void updateView(int startItem, int countItem);
-
-    /**
-     * todo
-     */
-    void showProgress();
 }
