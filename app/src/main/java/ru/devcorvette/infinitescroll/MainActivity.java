@@ -10,6 +10,8 @@ import android.widget.Toast;
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.assembly.Assembly;
+import ru.devcorvette.infinitescroll.pager.presentatation.IPagerPresenter;
+import ru.devcorvette.infinitescroll.pager.presentatation.view.IPagerView;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
 import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
 
@@ -18,6 +20,10 @@ public class MainActivity extends AppCompatActivity implements Router {
     @Inject IScrollView scrollView;
 
     @Inject IScrollPresenter scrollPresenter;
+
+    @Inject IPagerView pagerView;
+
+    @Inject IPagerPresenter pagerPresenter;
 
     /**
      * Initial assembly application and show main scroll fragment.
@@ -40,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements Router {
 
     /**
      * Присоединяет фрагмент.
-     * @param isBackStack если true, добавляет в  back stack.
+     * @param isBackStack если true, добавляет в back stack.
      */
     private void addFragment(Fragment fragment, boolean isBackStack){
         FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
@@ -50,6 +56,12 @@ public class MainActivity extends AppCompatActivity implements Router {
             tx.addToBackStack(fragment.toString());
         }
         tx.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        scrollPresenter.scrollToPosition(pagerPresenter.getLastCurrentPosition());
     }
 
     /**
@@ -69,16 +81,12 @@ public class MainActivity extends AppCompatActivity implements Router {
 
     @Override
     public void showPage(int pageNumber) {
-
+        addFragment((Fragment) pagerView, true);
+        pagerPresenter.setStartPage(pageNumber);
     }
 
     @Override
     public void showConnectError() {
         showMessage(getString(R.string.connect_error));
-    }
-
-    @Override
-    public void showServerError() {
-        showMessage(getString(R.string.server_error));
     }
 }

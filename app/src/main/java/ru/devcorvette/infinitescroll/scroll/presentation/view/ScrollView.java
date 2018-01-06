@@ -18,22 +18,22 @@ import ru.devcorvette.infinitescroll.R;
 import ru.devcorvette.infinitescroll.Router;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
 
-import java.util.List;
-
 public class ScrollView extends Fragment implements IScrollView {
 
     private static final String TAG = Router.TAG + ScrollView.class.getSimpleName();
 
     @Inject IScrollPresenter presenter;
 
-    private DatumAdapter adapter;
+    private ScrollRecyclerAdapter adapter;
 
     private InfiniteScrollListener scrollListener;
 
     private RecyclerView recyclerView;
 
+    private StaggeredGridLayoutManager layoutManager;
+
     public ScrollView() {
-        adapter = new DatumAdapter(this);
+        adapter = new ScrollRecyclerAdapter(this);
         scrollListener = new InfiniteScrollListener(this);
     }
 
@@ -45,44 +45,37 @@ public class ScrollView extends Fragment implements IScrollView {
         View view = inflater.inflate(R.layout.recycler_view, container, false);
 
         recyclerView = view.findViewById(R.id.recyclerView);
+        layoutManager = new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL);
 
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL));
+        recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemViewCacheSize(100);
         recyclerView.addOnScrollListener(scrollListener);
 
-        needUpdateData();
+        needUpdate();
 
         return view;
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void updateView(final List<String> urls) {
+    public void updateView(final int updateViewCount) {
         recyclerView.post(new Runnable() {
             @Override
             public void run() {
-
-                adapter.setVisibleProgress(false);
+                hideProgress();
 
                 int itemStart = adapter.getItemCount();
-                int itemCount = urls.size();
-
-                adapter.setUrls(urls);
+                adapter.setVisibleItemCount(itemStart + updateViewCount);
 
                 if(BuildConfig.DEBUG) {
                     Log.d(TAG, "update view. itemStart == " + itemStart
-                            + " itemCount == " + itemCount);
+                            + " itemCount == " + updateViewCount);
                 }
 
-                if(itemCount == 0){
+                if(updateViewCount == 0){
                     adapter.notifyItemRemoved(itemStart);
                 } else {
-                    adapter.notifyItemRangeChanged(itemStart, itemCount);
+                    adapter.notifyItemRangeChanged(itemStart, updateViewCount);
                 }
             }
         });
@@ -93,25 +86,58 @@ public class ScrollView extends Fragment implements IScrollView {
         recyclerView.post(new Runnable() {
             @Override
             public void run() {
-                if(BuildConfig.DEBUG) Log.d(TAG, "show progress");
-
                 adapter.setVisibleProgress(true);
                 adapter.notifyItemInserted(adapter.getItemCount());
+
+                if(BuildConfig.DEBUG) Log.d(TAG, "show progress");
             }
         });
     }
 
-    /**
-     * Запрос на новые данные.
-     */
-    void needUpdateData(){
-        presenter.needUpdateData(adapter.getItemCount());
+    @Override
+    public void hideProgress() {
+        adapter.setVisibleProgress(false);
+    }
+
+    @Override
+    public void needUpdate(){
+        if(!adapter.isVisibleProgress()){
+            presenter.needUpdateData(adapter.getItemCount());
+            showProgress();
+        }
+    }
+
+    @Override
+    public void showPage(int pageNumber){
+        presenter.showPage(pageNumber);
+    }
+
+    @Override
+    public String getImageURL(int position) {
+        return presenter.getImageURL(position);
     }
 
     /**
-     * Вызвать отображение модуля страницы.
+     * Не учитывает progress item.
      */
-    void showPage(int page){
-        presenter.showPage(page);
+    @Override
+    public int getVisibleItemCount() {
+        int result = adapter.getItemCount();
+
+        if(adapter.isVisibleProgress()) result--;
+
+        return result;
+    }
+
+    @Override
+    public void scrollToPosition(final int position) {
+        recyclerView.post(new Runnable() {
+            @Override
+            public void run() {
+                layoutManager.scrollToPosition(position);
+
+                if(BuildConfig.DEBUG) Log.d(TAG, "set current position " + position);
+            }
+        });
     }
 }

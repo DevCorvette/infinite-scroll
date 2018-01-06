@@ -11,7 +11,7 @@ import ru.devcorvette.infinitescroll.Router;
  * Вызывает метод загрузки данных.
  */
 class InfiniteScrollListener extends RecyclerView.OnScrollListener {
-    private ScrollView scrollView;
+    private IScrollView scrollView;
 
     public InfiniteScrollListener(ScrollView scrollView) {
         this.scrollView = scrollView;
@@ -36,7 +36,7 @@ class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         int firstVisibleItems = staggeredManager.findFirstVisibleItemPositions(null)[0];
 
         if ((visibleItemCount + firstVisibleItems) >= totalItemCount) {
-            scrollView.needUpdateData();
+            scrollView.needUpdate();
         }
 //        if (BuildConfig.DEBUG) {
 //            Log.d(TAG, "onScroll visibleItemCount == "
@@ -56,7 +56,7 @@ class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         if (recyclerView.getLayoutManager().getItemCount() == 0) {
             if (BuildConfig.DEBUG) Log.d(TAG, "item count == 0. Call need data.");
 
-            scrollView.needUpdateData();
+            scrollView.needUpdate();
         }
     }
 }

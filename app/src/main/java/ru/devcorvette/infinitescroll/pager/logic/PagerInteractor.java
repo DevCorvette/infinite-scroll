@@ -1,13 +1,13 @@
-package ru.devcorvette.infinitescroll.scroll.logic;
+package ru.devcorvette.infinitescroll.pager.logic;
 
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.base.logic.BaseInteractor;
-import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
+import ru.devcorvette.infinitescroll.pager.presentatation.IPagerPresenter;
 
-public class ScrollInteractor extends BaseInteractor {
+public class PagerInteractor extends BaseInteractor {
 
-    @Inject IScrollPresenter presenter;
+    @Inject IPagerPresenter presenter;
 
     @Override
     protected void showConnectError() {

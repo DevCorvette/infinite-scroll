@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Infinite Scroll</string>
     <string name="imageView">imageView</string>
-    <string name="connect_error">Отсутвует интернет соединение</string>
-    <string name="server_error">Ошибка сервера</string>
+    <string name="connect_error">Отсутвует соединение</string>
 </resources>

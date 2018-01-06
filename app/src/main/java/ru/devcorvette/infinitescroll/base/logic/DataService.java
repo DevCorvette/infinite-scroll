@@ -2,8 +2,7 @@ package ru.devcorvette.infinitescroll.base.logic;
 
 import android.util.Log;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -68,10 +67,8 @@ class DataService {
             public void onFailure(Call<FeedResponse> call, Throwable t) {
                 Log.w(TAG, "Callback on failure == " + t.getMessage());
 
-                if(t instanceof ConnectException){
+                if(t instanceof IOException){
                     interactor.showConnectError();
-                } else if (t instanceof SocketTimeoutException){
-                    interactor.showServerError();
 
                     //only for test
                     subject.onNext(TestDataService.createFakeFeedResponse());

@@ -20,9 +20,4 @@ public interface Router {
      * Отображает сообщение об отсутвии соединения.
      */
     void showConnectError();
-
-    /**
-     * Отображает сообщение об ошибке сервера.
-     */
-    void showServerError();
 }

@@ -1,38 +1,25 @@
 package ru.devcorvette.infinitescroll.scroll.presentation;
 
-import java.util.List;
+import ru.devcorvette.infinitescroll.base.presentation.IBasePresenter;
 
 /**
  * Scroll module presenter.
  */
-public interface IScrollPresenter{
-    /**
-     * Запрос на обновление данных у interactor.
-     */
-    void needUpdateData(int skip);
+public interface IScrollPresenter extends IBasePresenter{
 
     /**
-     * Передает новые данные во view.
+     * Извлекает из Datum image URL
+     * @param position позиция в списке MAIN_DATA.
      */
-    void updateView(List<String> urls);
+    String getImageURL(int position);
 
     /**
-     * Показывает progress bar.
+     * Вызывает модуль отображения страницы.
      */
-    void showProgress();
+    void showPage(int pageNumber);
 
     /**
-     * Call show page module.
+     * Scroll to the specified adapter position.
      */
-    void showPage(int page);
-
-    /**
-     * Передает сообщение об отсутвии интрнет соединения.
-     */
-    void showConnectError();
-
-    /**
-     * Передает сообщение об ошибке сервера.
-     */
-    void showServerError();
+    void scrollToPosition(int position);
 }

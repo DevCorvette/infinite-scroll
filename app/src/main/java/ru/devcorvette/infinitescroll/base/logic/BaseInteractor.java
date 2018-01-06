@@ -1,8 +1,10 @@
 package ru.devcorvette.infinitescroll.base.logic;
 
-import java.util.*;
-
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.Router;
@@ -24,6 +26,9 @@ public abstract class BaseInteractor implements IBaseInteractor {
 
     private Subscription dataSubscription;
 
+    /**
+     * Подписаться на получение данных.
+     */
     private void subscribe(){
         dataSubscription = dataService.getObservable().subscribe(new Action1<FeedResponse>() {
             @Override
@@ -42,7 +47,9 @@ public abstract class BaseInteractor implements IBaseInteractor {
             if(BuildConfig.DEBUG) Log.d(TAG, "need data. skip == " + skip + " data.size == " + size);
 
             if(skip < size){
-                finishUpdate(skip, size - skip);
+                if(BuildConfig.DEBUG) Log.d(TAG, "data do not need loaded");
+
+                finishUpdate(size - skip);
             } else {
                 loadData(skip);
             }
@@ -55,16 +62,26 @@ public abstract class BaseInteractor implements IBaseInteractor {
     protected void loadData(int skip){
         if(dataSubscription == null) subscribe();
 
-        showProgress();
         dataService.loadData(skip, take);
+
+        if(BuildConfig.DEBUG) Log.d(TAG, "load data");
+    }
+
+    /**
+     * @param datumPosition позиция в списке MAIN_DATA.
+     */
+    public Datum getDatum(int datumPosition){
+        return MAIN_DATA.get(datumPosition);
     }
 
     /**
      * Завершение обновления.
      */
-    protected void finishUpdate(int startItem, int countItem){
+    protected void finishUpdate(int countItem){
+        if(BuildConfig.DEBUG) Log.d(TAG, "finish update. Count of updated item " +  countItem);
+
         isLoad = false;
-        convertDataForView(startItem, countItem);
+        updateView(countItem);
     }
 
     /**
@@ -75,18 +92,12 @@ public abstract class BaseInteractor implements IBaseInteractor {
             Log.d(TAG, "set data. oldData.size == " + MAIN_DATA.size()
                     + " downloadedData.size == " + downloadedData.size());
         }
-        int startItem = MAIN_DATA.size();
         int itemCount = downloadedData.size();
         MAIN_DATA.addAll(downloadedData);
 
-        finishUpdate(startItem, itemCount);
-    }
+        finishUpdate(itemCount);
 
-    /**
-     * @param datumPosition позиция в списке MAIN_DATA.
-     */
-    protected Datum getDatum(int datumPosition){
-        return MAIN_DATA.get(datumPosition);
+        if(BuildConfig.DEBUG) Log.d(TAG, "set data");
     }
 
     /**
@@ -111,22 +122,12 @@ public abstract class BaseInteractor implements IBaseInteractor {
     }
 
     /**
-     * Запускает отображение прогресса.
-     */
-    protected abstract void showProgress();
-
-    /**
-     * Преобразованиея данных для дальнейшего отображения.
-     */
-    protected abstract void convertDataForView(int startItem, int countItem);
-
-    /**
-     * Call presenter to report server error.
-     */
-    protected abstract void showServerError();
-
-    /**
      * Call presenter to report connect error.
      */
     protected abstract void showConnectError();
+
+    /**
+     * Сообщить отображению об обновленных данных.
+     */
+    protected abstract void updateView(int countItem);
 }

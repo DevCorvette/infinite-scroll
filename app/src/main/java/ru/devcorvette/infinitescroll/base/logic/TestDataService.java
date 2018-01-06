@@ -101,6 +101,7 @@ class TestDataService {
             Datum datum = new Datum();
             CoverInfo[] coverArray = new CoverInfo[urls[i].length];
             datum.setCoverInfo(coverArray);
+            setStrings(datum, i);
 
             for (int j = 0; j < urls[i].length; j++) {
                 CoverInfo ci = new CoverInfo();
@@ -113,7 +114,18 @@ class TestDataService {
     }
 
     /**
-     * Создает фейковый FeedResponse.
+     * set fake strings
+     */
+    private static void setStrings(Datum datum, int position){
+        datum.setId(String.valueOf(position));
+        datum.setType("type");
+        datum.setTitle("title");
+        datum.setDescription("description");
+        datum.setAddress("address");
+    }
+
+    /**
+     * Create fake FeedResponse.
      */
     public static FeedResponse createFakeFeedResponse(){
         FeedResponse f = new FeedResponse();

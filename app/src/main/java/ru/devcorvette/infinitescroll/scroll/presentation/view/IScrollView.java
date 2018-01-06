@@ -1,19 +1,43 @@
 package ru.devcorvette.infinitescroll.scroll.presentation.view;
 
-import java.util.List;
-
-/**
- * Scroll module view.
- */
 public interface IScrollView {
     /**
-     * Добавляет новые данные для отображения.
+     * @param updateViewCount количество новых данных доступных для обновления.
      */
-    void updateView(List<String> urls);
+    void updateView(int updateViewCount);
 
     /**
-     * Отображает progress bar.
+     * Запрос на обновление данных.
+     */
+    void needUpdate();
+
+    /**
+     * Вызвать вызвать модуль отображение страницы.
+     */
+    void showPage(int pageNumber);
+
+    /**
+     * Запрашивает URL изображения.
+     */
+    String getImageURL(int position);
+
+    /**
+     * @return количество видимых элементов.
+     */
+    int getVisibleItemCount();
+
+    /**
+     * Show the progress bar.
      */
     void showProgress();
-}
 
+    /**
+     * Hide the progress bar.
+     */
+    void hideProgress();
+
+    /**
+     * Scroll to the specified adapter position.
+     */
+    void scrollToPosition(int position);
+}

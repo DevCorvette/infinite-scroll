@@ -1,17 +1,18 @@
 package ru.devcorvette.infinitescroll.assembly;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.Router;
-import ru.devcorvette.infinitescroll.base.logic.IBaseInteractor;
-import ru.devcorvette.infinitescroll.scroll.logic.IScrollInteractor;
+import ru.devcorvette.infinitescroll.pager.logic.PagerInteractor;
+import ru.devcorvette.infinitescroll.pager.presentatation.IPagerPresenter;
+import ru.devcorvette.infinitescroll.pager.presentatation.PagerPresenter;
+import ru.devcorvette.infinitescroll.pager.presentatation.view.IPagerView;
+import ru.devcorvette.infinitescroll.pager.presentatation.view.PagerView;
 import ru.devcorvette.infinitescroll.scroll.logic.ScrollInteractor;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
-import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
 import ru.devcorvette.infinitescroll.scroll.presentation.ScrollPresenter;
+import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
 import ru.devcorvette.infinitescroll.scroll.presentation.view.ScrollView;
 
 @Module
@@ -20,8 +21,12 @@ public class Assembly {
     private AssemblyComponent component;
 
     private ScrollPresenter scrollPresenter = new ScrollPresenter();
-    private ScrollInteractor scrollInteractor = new ScrollInteractor();
     private ScrollView scrollView = new ScrollView();
+    private ScrollInteractor scrollInteractor = new ScrollInteractor();
+
+    private PagerPresenter pagerPresenter = new PagerPresenter();
+    private PagerView pagerView = new PagerView();
+    private PagerInteractor pagerInteractor = new PagerInteractor();
 
     public Assembly(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
@@ -37,24 +42,40 @@ public class Assembly {
         component.inject(scrollPresenter);
         component.inject(scrollInteractor);
         component.inject(scrollView);
+
+        component.inject(pagerPresenter);
+        component.inject(pagerView);
+        component.inject(pagerInteractor);
     }
 
     @Provides
-    @Singleton
+    public ScrollInteractor provideBaseInteractor(){
+        return scrollInteractor;
+    }
+
+    @Provides
+    public PagerInteractor providePagerInteractor(){
+        return pagerInteractor;
+    }
+
+    @Provides
     public IScrollPresenter provideScrollPresenter(){
         return scrollPresenter;
     }
 
     @Provides
-    @Singleton
     public IScrollView provideScrollView(){
         return scrollView;
     }
 
     @Provides
-    @Singleton
-    public IScrollInteractor provideScrollInteractor(){
-        return scrollInteractor;
+    public IPagerPresenter providePagerPresenter(){
+        return pagerPresenter;
+    }
+
+    @Provides
+    public IPagerView providePagerView(){
+        return pagerView;
     }
 
     @Provides
