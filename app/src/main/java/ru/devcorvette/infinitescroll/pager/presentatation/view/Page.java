@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.Router;
 
 public class Page extends Fragment {
-    private static final String TAG = Router.TAG + Page.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + Page.class.getSimpleName();
 
     private PageRecyclerAdapter adapter;
     private RecyclerView recyclerView;

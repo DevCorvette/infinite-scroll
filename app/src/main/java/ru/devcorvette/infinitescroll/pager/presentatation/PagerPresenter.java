@@ -8,23 +8,26 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.base.logic.entity.CoverInfo;
 import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 import ru.devcorvette.infinitescroll.pager.logic.PagerInteractor;
 import ru.devcorvette.infinitescroll.pager.logic.entity.PageDatum;
 import ru.devcorvette.infinitescroll.pager.presentatation.view.IPagerView;
+import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
 
 public class PagerPresenter implements IPagerPresenter {
-    private static final String TAG = Router.TAG + PagerPresenter.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + PagerPresenter.class.getSimpleName();
+
     @Inject IPagerView pagerView;
 
     @Inject PagerInteractor interactor;
 
-    @Inject Router router;
+    @Inject IPagerRouter router;
+
+    @Inject IScrollPresenter scrollPresenter;
 
     private int startPage;
-    private int lastCurrentPosition = 0;
     private boolean isStartPageShown = false;
 
     private final List<PageDatum> pagesData = new ArrayList<>();
@@ -89,13 +92,8 @@ public class PagerPresenter implements IPagerPresenter {
     }
 
     @Override
-    public int getLastCurrentPosition() {
-        return lastCurrentPosition;
-    }
-
-    @Override
-    public void setLastCurrentPosition(int position) {
-        lastCurrentPosition = position;
+    public void showScroll(int lastPage) {
+        scrollPresenter.scrollToPosition(lastPage);
     }
 
     private String[] extractImagesURL(int position) {

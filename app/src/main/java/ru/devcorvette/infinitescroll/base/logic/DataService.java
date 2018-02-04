@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.base.logic.entity.FeedRequest;
 import ru.devcorvette.infinitescroll.base.logic.entity.FeedResponse;
 import rx.subjects.PublishSubject;
@@ -22,7 +22,7 @@ import rx.subjects.PublishSubject;
  */
 class DataService {
     private static final String ROOT_URL = "http://109.111.162.236:8083/api/v2/";
-    private static final String TAG = Router.TAG + DataService.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + DataService.class.getSimpleName();
 
     private PublishSubject<FeedResponse> subject;
     private ApiService api = getApiService();

@@ -5,7 +5,7 @@ import javax.inject.Inject;
 import ru.devcorvette.infinitescroll.base.logic.BaseInteractor;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
 
-public class ScrollInteractor extends BaseInteractor {
+public class ScrollInteractor extends BaseInteractor implements IScrollInteractor {
 
     @Inject IScrollPresenter presenter;
 

@@ -11,10 +11,5 @@ public interface IPagerPresenter extends IBasePresenter {
 
     void setStartPage(int pageNumber);
 
-    /**
-     * @return позиция последней открытой страницы.
-     */
-    int getLastCurrentPosition();
-
-    void setLastCurrentPosition(int position);
+    void showScroll(int lastPage);
 }

@@ -7,14 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
 import ru.devcorvette.infinitescroll.base.logic.entity.FeedResponse;
 import rx.Subscription;
 import rx.functions.Action1;
 
 public abstract class BaseInteractor implements IBaseInteractor {
-    private static final String TAG = Router.TAG + BaseInteractor.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + BaseInteractor.class.getSimpleName();
 
     private static final List<Datum> MAIN_DATA = new ArrayList<>();
 

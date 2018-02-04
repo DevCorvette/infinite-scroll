@@ -5,7 +5,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.MainActivity;
 
 /**
  * Вызывает метод загрузки данных.
@@ -17,7 +17,7 @@ class InfiniteScrollListener extends RecyclerView.OnScrollListener {
         this.scrollView = scrollView;
     }
 
-    private static final String TAG = Router.TAG + InfiniteScrollListener.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + InfiniteScrollListener.class.getSimpleName();
 
     /**
      * Вызывается только при прокурутки вниз.

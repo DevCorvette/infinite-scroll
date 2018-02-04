@@ -2,25 +2,28 @@ package ru.devcorvette.infinitescroll.scroll.presentation;
 
 import javax.inject.Inject;
 
-import ru.devcorvette.infinitescroll.Router;
 import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
-import ru.devcorvette.infinitescroll.scroll.logic.ScrollInteractor;
+import ru.devcorvette.infinitescroll.scroll.assembly.IScrollAssembly;
+import ru.devcorvette.infinitescroll.scroll.logic.IScrollInteractor;
 import ru.devcorvette.infinitescroll.scroll.presentation.view.IScrollView;
 
 public class ScrollPresenter implements IScrollPresenter {
 
     @Inject IScrollView scrollView;
 
-    @Inject ScrollInteractor interactor;
+    @Inject IScrollInteractor interactor;
 
-    @Inject Router router;
+    @Inject IScrollRouter router;
+
+    @Inject IScrollAssembly assembly;
 
     private boolean needUpdateCurrentPosition = false;
     private int currentPosition;
 
     @Override
     public void showPage(int page) {
-        router.showPage(page);
+        router.showPager();
+        assembly.getPagerPresenter().setStartPage(page);
     }
 
     @Override

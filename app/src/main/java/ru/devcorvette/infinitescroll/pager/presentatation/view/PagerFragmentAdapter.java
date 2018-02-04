@@ -7,11 +7,11 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
-import ru.devcorvette.infinitescroll.Router;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.pager.logic.entity.PageDatum;
 
 class PagerFragmentAdapter extends FragmentStatePagerAdapter {
-    private static final String TAG = Router.TAG + PagerFragmentAdapter.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + PagerFragmentAdapter.class.getSimpleName();
 
     private IPagerView pagerView;
     private int availableCount = 0;

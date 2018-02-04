@@ -12,17 +12,15 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.Router;
 import ru.devcorvette.infinitescroll.pager.logic.entity.PageDatum;
 import ru.devcorvette.infinitescroll.pager.presentatation.IPagerPresenter;
 
 public class PagerView extends Fragment implements IPagerView {
-    private static final String TAG = Router.TAG + PagerView.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + PagerView.class.getSimpleName();
 
     @Inject IPagerPresenter presenter;
-
-    @Inject Router router;
 
     private ViewPager viewPager;
     private PagerFragmentAdapter pagerAdapter;
@@ -40,15 +38,6 @@ public class PagerView extends Fragment implements IPagerView {
         needUpdate(0);
 
         return view;
-    }
-
-    /**
-     * Устанавливает номер последней открытой страницы перед закрытием.
-     */
-    @Override
-    public void onDestroyView() {
-        presenter.setLastCurrentPosition(viewPager.getCurrentItem());
-        super.onDestroyView();
     }
 
     @Override
@@ -90,5 +79,10 @@ public class PagerView extends Fragment implements IPagerView {
         if (BuildConfig.DEBUG) Log.d(TAG, "call need update data. Skip = " + skip);
 
         presenter.needUpdateData(skip);
+    }
+
+    @Override
+    public void onBackPressed() {
+        presenter.showScroll(viewPager.getCurrentItem());
     }
 }

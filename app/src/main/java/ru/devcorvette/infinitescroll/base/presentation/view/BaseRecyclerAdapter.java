@@ -10,14 +10,14 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.Router;
 
 /**
  * Адаптер для загрузки и отображения изображений.
  */
 public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-    private static final String TAG = Router.TAG + BaseRecyclerAdapter.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + BaseRecyclerAdapter.class.getSimpleName();
     public final int IMAGE_ITEM = 0;
 
     /**

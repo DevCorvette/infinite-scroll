@@ -23,4 +23,9 @@ public interface IPagerView {
      * @param skip количество уже загруженных данных.
      */
     void needUpdate(int skip);
+
+    /**
+     * Действия при нажатии кнопки назад
+     */
+    void onBackPressed();
 }

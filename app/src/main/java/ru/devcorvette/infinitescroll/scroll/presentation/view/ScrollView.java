@@ -14,13 +14,13 @@ import android.view.ViewGroup;
 import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
+import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.Router;
 import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
 
 public class ScrollView extends Fragment implements IScrollView {
 
-    private static final String TAG = Router.TAG + ScrollView.class.getSimpleName();
+    private static final String TAG = MainActivity.TAG + ScrollView.class.getSimpleName();
 
     @Inject IScrollPresenter presenter;
 
