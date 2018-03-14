@@ -4,29 +4,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.base.presentation.view.BaseRecyclerAdapter;
+import ru.devcorvette.infinitescroll.baselist.presentation.view.BaseListAdapter;
+import ru.devcorvette.infinitescroll.baselist.presentation.view.IBaseListView;
 
 /**
  * Адаптер для отображения деталей конкретной страницы.
  */
-class PageRecyclerAdapter extends BaseRecyclerAdapter {
+class PageListAdapter extends BaseListAdapter {
     public final int TEXT_ITEM = 2;
 
     private String[] imagesURL;
     private String[] strings;
 
-    public PageRecyclerAdapter(String[] imagesURL, String[] strings) {
-        this.imagesURL = imagesURL;
-        this.strings = strings;
+
+    //todo wtf?
+    public PageListAdapter(IBaseListView listView) {
+        super(listView);
     }
+
+//    public PageListAdapter(String[] imagesURL, String[] strings) {
+//        this.imagesURL = imagesURL;
+//        this.strings = strings;
+//    }
 
     /**
      * Если viewType == TEXT_ITEM - создает TextHolder,
-     * остальное создает BaseRecyclerAdapter.
+     * остальное создает BaseListAdapter.
      */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,16 +53,17 @@ class PageRecyclerAdapter extends BaseRecyclerAdapter {
      */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof TextHolder) {
-
-            TextView textView = ((TextHolder)holder).textView;
-            textView.setText(strings[position - imagesURL.length]);
-
-        } else if (holder instanceof ImageHolder){
-
-            ImageView imageView = ((ImageHolder) holder).imageView;
-            loadImage(imageView, imagesURL[position]);
-        }
+        //todo wtf?
+//        if (holder instanceof TextHolder) {
+//
+//            TextView textView = ((TextHolder)holder).textView;
+//            textView.setText(strings[position - imagesURL.length]);
+//
+//        } else if (holder instanceof ImageHolder){
+//
+//            ImageView imageView = ((ImageHolder) holder).imageView;
+//            loadImage(imageView, imagesURL[position]);
+//        }
     }
 
     /**
@@ -67,7 +74,7 @@ class PageRecyclerAdapter extends BaseRecyclerAdapter {
         int viewType;
 
         if(position < imagesURL.length){
-            viewType = IMAGE_ITEM;
+            viewType = NORMAL_ITEM;
 
         } else {
             viewType = TEXT_ITEM;

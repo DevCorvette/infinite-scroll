@@ -17,7 +17,7 @@ import ru.devcorvette.infinitescroll.R;
 public class Page extends Fragment {
     private static final String TAG = MainActivity.TAG + Page.class.getSimpleName();
 
-    private PageRecyclerAdapter adapter;
+    private PageListAdapter adapter;
     private RecyclerView recyclerView;
 
     /**
@@ -42,7 +42,7 @@ public class Page extends Fragment {
         return view;
     }
 
-    public void setAdapter(PageRecyclerAdapter adapter) {
+    public void setAdapter(PageListAdapter adapter) {
         this.adapter = adapter;
     }
 }

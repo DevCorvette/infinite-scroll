@@ -1,5 +1,6 @@
-package ru.devcorvette.infinitescroll.base.logic;
+package ru.devcorvette.infinitescroll.baselist.logic;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -13,8 +14,8 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.MainActivity;
-import ru.devcorvette.infinitescroll.base.logic.entity.FeedRequest;
-import ru.devcorvette.infinitescroll.base.logic.entity.FeedResponse;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.FeedRequest;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.FeedResponse;
 import rx.subjects.PublishSubject;
 
 /**
@@ -27,9 +28,9 @@ class DataService {
     private PublishSubject<FeedResponse> subject;
     private ApiService api = getApiService();
 
-    private BaseInteractor interactor;
+    private BaseListInteractor interactor;
 
-    DataService(BaseInteractor interactor){
+    DataService(BaseListInteractor interactor){
         this.interactor = interactor;
 
         subject = PublishSubject.create();
@@ -71,7 +72,18 @@ class DataService {
                     interactor.showConnectError();
 
                     //only for test
-                    subject.onNext(TestDataService.createFakeFeedResponse());
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
+                            try {
+                                //имитирует задержку от сервера
+                                Thread.sleep(1500);
+                            } catch (InterruptedException ignored) {}
+
+                            subject.onNext(TestDataService.createFakeFeedResponse());
+                            return null;
+                        }
+                    }.execute();
                     return;
                 }
                 subject.onNext(null);

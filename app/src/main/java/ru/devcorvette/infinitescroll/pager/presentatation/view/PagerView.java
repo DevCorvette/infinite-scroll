@@ -1,37 +1,41 @@
 package ru.devcorvette.infinitescroll.pager.presentatation.view;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import javax.inject.Inject;
 
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.MainActivity;
-import ru.devcorvette.infinitescroll.R;
-import ru.devcorvette.infinitescroll.pager.logic.entity.PageDatum;
+import ru.devcorvette.infinitescroll.baselist.presentation.view.BaseListAdapter;
+import ru.devcorvette.infinitescroll.baselist.presentation.view.BaseListView;
 import ru.devcorvette.infinitescroll.pager.presentatation.IPagerPresenter;
 
-public class PagerView extends Fragment implements IPagerView {
+public abstract class PagerView extends BaseListView implements IPagerView {
     private static final String TAG = MainActivity.TAG + PagerView.class.getSimpleName();
 
-    @Inject IPagerPresenter presenter;
+    protected IPagerPresenter presenter;
 
-    private ViewPager viewPager;
-    private PagerFragmentAdapter pagerAdapter;
+//    private ViewPager viewPager;
+//    private PagerFragmentAdapter pagerAdapter;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
 
+    public PagerView(IPagerPresenter presenter) {
+        super(presenter);
+    }
+    /*
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.view_pager, null);
-        viewPager = view.findViewById(R.id.viewPager);
-        pagerAdapter = new PagerFragmentAdapter(this, getChildFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
+//        viewPager = view.findViewById(R.id.viewPager);
+//        pagerAdapter = new PagerFragmentAdapter(this, getChildFragmentManager());
+//        viewPager.setAdapter(pagerAdapter);
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        layoutManager = new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
 
         if (BuildConfig.DEBUG) Log.d(TAG, "on create view.");
 
@@ -73,7 +77,7 @@ public class PagerView extends Fragment implements IPagerView {
             }
         });
     }
-
+*/
     @Override
     public void needUpdate(int skip) {
         if (BuildConfig.DEBUG) Log.d(TAG, "call need update data. Skip = " + skip);
@@ -83,6 +87,22 @@ public class PagerView extends Fragment implements IPagerView {
 
     @Override
     public void onBackPressed() {
-        presenter.showScroll(viewPager.getCurrentItem());
+//        presenter.showScroll(viewPager.getCurrentItem());
+    }
+
+    //todo refactor
+    @Override
+    protected RecyclerView.LayoutManager createLayoutManager() {
+        return null;
+    }
+
+    @Override
+    protected BaseListAdapter createAdapter() {
+        return null;
+    }
+
+    @Override
+    protected RecyclerView.OnScrollListener createListener() {
+        return null;
     }
 }

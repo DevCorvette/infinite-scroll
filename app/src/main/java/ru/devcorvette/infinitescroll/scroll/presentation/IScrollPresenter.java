@@ -1,11 +1,11 @@
 package ru.devcorvette.infinitescroll.scroll.presentation;
 
-import ru.devcorvette.infinitescroll.base.presentation.IBasePresenter;
+import ru.devcorvette.infinitescroll.baselist.presentation.IBaseListPresenter;
 
 /**
  * Scroll module presenter.
  */
-public interface IScrollPresenter extends IBasePresenter{
+public interface IScrollPresenter extends IBaseListPresenter {
 
     /**
      * Извлекает из Datum image URL

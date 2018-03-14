@@ -6,18 +6,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import ru.devcorvette.infinitescroll.base.assembly.BaseAssembly;
+import ru.devcorvette.infinitescroll.base.presentation.BaseRouter;
+import ru.devcorvette.infinitescroll.baselist.logic.BaseListInteractor;
 import ru.devcorvette.infinitescroll.pager.presentatation.view.IPagerView;
-import ru.devcorvette.infinitescroll.scroll.assembly.ScrollAssembly;
+import ru.devcorvette.infinitescroll.scroll.presentation.ScrollPresenter;
+import ru.devcorvette.infinitescroll.scroll.presentation.view.ScrollView;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "my_debug_";
-
-    private static MainActivity instance;
-
-    public MainActivity() {
-        instance = this;
-    }
 
     /**
      * Создает и отображает Scroll module
@@ -27,9 +25,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-        ScrollAssembly sa = new ScrollAssembly();
+//        ScrollAssembly sa = new ScrollAssembly();
+//        addFragment((Fragment)sa.provideScrollView(), false);
 
-        addFragment((Fragment)sa.provideScrollView(), false);
+        BaseAssembly<ScrollPresenter, ScrollView, BaseListInteractor, BaseRouter> scrollAssembly
+                = new BaseAssembly<>(
+                        this,
+                        ScrollPresenter.class, ScrollView.class,
+                        BaseListInteractor.class,
+                        BaseRouter.class);
+
+        addFragment(scrollAssembly.getView().getFragment(), false);
     }
 
     @Override
@@ -50,10 +56,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void addFragment(Fragment fragment, boolean isBackStack){
 
-        FragmentTransaction tx = MainActivity
-                .getInstance()
-                .getSupportFragmentManager()
-                .beginTransaction();
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction();
 
         tx.add(R.id.fragmentContent, fragment);
 
@@ -62,9 +65,4 @@ public class MainActivity extends AppCompatActivity {
         }
         tx.commit();
     }
-
-    public static MainActivity getInstance(){
-        return instance;
-    }
-
 }
