@@ -1,8 +1,8 @@
-package ru.devcorvette.infinitescroll.base.logic;
+package ru.devcorvette.infinitescroll.baselist.logic;
 
-import ru.devcorvette.infinitescroll.base.logic.entity.CoverInfo;
-import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
-import ru.devcorvette.infinitescroll.base.logic.entity.FeedResponse;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.CoverInfo;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.Datum;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.FeedResponse;
 
 /**
  * Только для тестирования, если сервер http://109.111.162.236:8083/api/v2/ не работает.

@@ -11,13 +11,13 @@ import ru.devcorvette.infinitescroll.MainActivity;
  * Вызывает метод загрузки данных.
  */
 class InfiniteScrollListener extends RecyclerView.OnScrollListener {
+    private static final String TAG = MainActivity.TAG + InfiniteScrollListener.class.getSimpleName();
+
     private IScrollView scrollView;
 
-    public InfiniteScrollListener(ScrollView scrollView) {
+    public InfiniteScrollListener(IScrollView scrollView) {
         this.scrollView = scrollView;
     }
-
-    private static final String TAG = MainActivity.TAG + InfiniteScrollListener.class.getSimpleName();
 
     /**
      * Вызывается только при прокурутки вниз.

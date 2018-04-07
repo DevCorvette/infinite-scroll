@@ -34,8 +34,8 @@ class PagerFragmentAdapter extends FragmentStatePagerAdapter {
         }
         Page page = new Page();
         PageDatum datum = pagerView.getPageData(position);
-
-        page.setAdapter(new PageRecyclerAdapter(datum.getImagesURL(), datum.getStrings()));
+//todo wtf?
+//        page.setAdapter(new PageListAdapter(datum.getImagesURL(), datum.getStrings()));
 
         if (BuildConfig.DEBUG) Log.d(TAG, "create page #" + position);
 

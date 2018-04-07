@@ -5,32 +5,30 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import ru.devcorvette.infinitescroll.BuildConfig;
 import ru.devcorvette.infinitescroll.MainActivity;
-import ru.devcorvette.infinitescroll.base.logic.entity.CoverInfo;
-import ru.devcorvette.infinitescroll.base.logic.entity.Datum;
-import ru.devcorvette.infinitescroll.pager.logic.PagerInteractor;
+import ru.devcorvette.infinitescroll.base.presentation.IBaseRouter;
+import ru.devcorvette.infinitescroll.baselist.logic.IBaseListInteractor;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.CoverInfo;
+import ru.devcorvette.infinitescroll.baselist.logic.entity.Datum;
+import ru.devcorvette.infinitescroll.baselist.presentation.BaseListPresenter;
 import ru.devcorvette.infinitescroll.pager.logic.entity.PageDatum;
 import ru.devcorvette.infinitescroll.pager.presentatation.view.IPagerView;
-import ru.devcorvette.infinitescroll.scroll.presentation.IScrollPresenter;
 
-public class PagerPresenter implements IPagerPresenter {
+public class PagerPresenter extends BaseListPresenter implements IPagerPresenter {
+
     private static final String TAG = MainActivity.TAG + PagerPresenter.class.getSimpleName();
 
-    @Inject IPagerView pagerView;
-
-    @Inject PagerInteractor interactor;
-
-    @Inject IPagerRouter router;
-
-    @Inject IScrollPresenter scrollPresenter;
+    protected IPagerView view;
 
     private int startPage;
     private boolean isStartPageShown = false;
 
     private final List<PageDatum> pagesData = new ArrayList<>();
+
+    public PagerPresenter(IPagerView view, IBaseListInteractor interactor, IBaseRouter router) {
+        super(view, interactor, router);
+    }
 
     @Override
     public void updateView(int updateItemCount) {
@@ -40,7 +38,7 @@ public class PagerPresenter implements IPagerPresenter {
             pagesData.add(new PageDatum(extractImagesURL(i), extractStrings(i)));
         }
 
-        pagerView.setAvailablePageCount(pagesData.size());
+        view.setAvailablePageCount(pagesData.size());
 
         showStartPage();
     }
@@ -52,7 +50,7 @@ public class PagerPresenter implements IPagerPresenter {
 
         } else if(!isStartPageShown){
 
-            pagerView.showStartPage(startPage);
+            view.showStartPage(startPage);
             isStartPageShown = true;
         }
     }
@@ -93,7 +91,8 @@ public class PagerPresenter implements IPagerPresenter {
 
     @Override
     public void showScroll(int lastPage) {
-        scrollPresenter.scrollToPosition(lastPage);
+        //todo
+//        scrollPresenter.scrollToPosition(lastPage);
     }
 
     private String[] extractImagesURL(int position) {

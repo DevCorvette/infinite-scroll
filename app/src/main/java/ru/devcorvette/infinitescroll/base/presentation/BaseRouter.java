@@ -3,27 +3,33 @@ package ru.devcorvette.infinitescroll.base.presentation;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import javax.inject.Inject;
+
 import ru.devcorvette.infinitescroll.MainActivity;
 import ru.devcorvette.infinitescroll.R;
 
-public abstract class BaseRouter implements IBaseRouter {
+public class BaseRouter implements IBaseRouter {
 
+    protected MainActivity mainActivity;
+
+    @Inject
+    public BaseRouter(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
 
     protected void addFragment(Fragment fragment, boolean isBackStack){
-        MainActivity.getInstance().addFragment(fragment, isBackStack);
+        mainActivity.addFragment(fragment, isBackStack);
     }
 
     protected void showToastMessage(String message){
         Toast.makeText(
-                MainActivity.getInstance().getApplicationContext(),
+                mainActivity.getApplicationContext(),
                 message,
                 Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showConnectError() {
-        showToastMessage(MainActivity
-                .getInstance()
-                .getString(R.string.connect_error));
+        showToastMessage(mainActivity.getString(R.string.connect_error));
     }
 }

@@ -1,8 +1,9 @@
 package ru.devcorvette.infinitescroll.pager.presentatation.view;
 
+import ru.devcorvette.infinitescroll.baselist.presentation.view.IBaseListView;
 import ru.devcorvette.infinitescroll.pager.logic.entity.PageDatum;
 
-public interface IPagerView {
+public interface IPagerView extends IBaseListView{
     /**
      * запрашивает данные страницы по номеру.
      */

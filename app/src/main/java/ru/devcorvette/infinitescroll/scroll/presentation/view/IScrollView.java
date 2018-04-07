@@ -1,16 +1,8 @@
 package ru.devcorvette.infinitescroll.scroll.presentation.view;
 
-public interface IScrollView {
-    /**
-     * @param updateViewCount количество новых данных доступных для обновления.
-     */
-    void updateView(int updateViewCount);
+import ru.devcorvette.infinitescroll.baselist.presentation.view.IBaseListView;
 
-    /**
-     * Запрос на обновление данных.
-     */
-    void needUpdate();
-
+public interface IScrollView extends IBaseListView {
     /**
      * Вызвать вызвать модуль отображение страницы.
      */
@@ -20,24 +12,4 @@ public interface IScrollView {
      * Запрашивает URL изображения.
      */
     String getImageURL(int position);
-
-    /**
-     * @return количество видимых элементов.
-     */
-    int getVisibleItemCount();
-
-    /**
-     * Show the progress bar.
-     */
-    void showProgress();
-
-    /**
-     * Hide the progress bar.
-     */
-    void hideProgress();
-
-    /**
-     * Scroll to the specified adapter position.
-     */
-    void scrollToPosition(int position);
 }
