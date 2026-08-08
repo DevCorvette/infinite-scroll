@@ -1,15 +1,23 @@
-﻿Infinite scroll
-================
-##### Android application with VIPER architecture
+# Infinite Scroll
 
-# ![Demonstration](https://github.com/DevCorvette/infinite-scroll/blob/master/demonstration.gif)
+Android-приложение с бесконечной лентой изображений: страницы подгружаются по мере прокрутки.
 
+Учебный проект 2018 года, написан на стажировке — чтобы разобраться с VIPER, Dagger 2 и работой
+с REST API из Android.
 
-##### Libraries
+![Демонстрация](demonstration.gif)
 
-* Dagger 2
-* RxJava
-* Retrofit 2
-* Picasso
+## Как устроено
 
+VIPER: слой `base` задаёт абстрактные View, Presenter, Interactor и Router, `baselist` — общую
+логику списка, `scroll` и `pager` — два экрана поверх неё.
 
+- **Подгрузка.** `InfiniteScrollListener` просит следующую страницу, когда последний элемент
+  `RecyclerView` стал видимым. Страница — девять элементов, запрос идёт со `skip` и `take`.
+- **Сеть.** Retrofit 2 и Gson, `POST /api/v2/Feed`. Ответ уходит в `PublishSubject` (RxJava),
+  на него подписан интерактор: колбэк Retrofit превращается в поток.
+- **Кеш.** Загруженное держится в памяти — возврат вверх и повторная прокрутка новых запросов
+  не порождают.
+- **DI.** `BaseAssembly` — generic-модуль Dagger 2: принимает четыре класса модуля, создаёт их
+  рефлексией и связывает между собой.
+- **Отображение.** Picasso, плиточная сетка `StaggeredGridLayoutManager` в две колонки.
